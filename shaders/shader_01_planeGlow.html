@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>my first shader</title>
+    <meta charset="utf-8">
+    <style>
+        body { margin: 0; }
+    </style>
+  </head>
+  <body>
+    <script src="../js/three.js"></script>
+    <script id="vertexShader" type="x-shader/x-vertex">
+      precision mediump float;
+      precision mediump int;
+
+      uniform mat4 modelViewMatrix;
+      uniform mat4 projectionMatrix;
+
+      attribute vec3 position;
+
+      varying vec3 vPosition;
+
+      void main() {
+
+          vPosition = position;
+          gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+
+      }
+    </script>
+    <script id="fragmentShader" type="x-shader/x-fragment">
+
+        precision mediump float;
+        precision mediump int;
+    
+        uniform float ratio;
+    
+        varying vec3 vPosition;
+    
+        void main() {
+            vec3 center = vec3( 0.0,0.0,0.0 );
+            float dist = distance(vPosition,center)/2.0; 
+            dist = clamp(dist,0.0,1.0); 
+            float color = 1.0-dist ; 
+            gl_FragColor =  vec4( color*ratio, color*ratio,0.0,dist );
+    
+        }
+    
+    </script>
+    <script>
+      // Our Javascript will go here.
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000);
+
+      const renderer = new THREE.WebGLRenderer();
+      renderer.setSize( window.innerWidth, window.innerHeight);
+      document.body.appendChild( renderer.domElement );
+
+      const geometry = new THREE.PlaneGeometry(5, 5, 2);
+      const material = new THREE.RawShaderMaterial({
+        uniforms: {
+          ratio: {
+            value: 0.0
+          }
+        },
+        vertexShader: document.getElementById('vertexShader').textContent,
+        fragmentShader: document.getElementById('fragmentShader').textContent
+      });
+      const plane = new THREE.Mesh( geometry, material);
+      // plane.rotateX(-Math.PI / 2);
+      scene.add( plane );
+      console.log("PI----", Math.PI);
+      camera.position.z = 5;
+      var next = 0.0;
+      const animate = function () {
+          requestAnimationFrame(animate);
+          next = next + 0.01;
+          if (next > 1)
+              next = 0.0;
+          plane.material.uniforms.ratio.value = next;
+          renderer.render(scene, camera);
+      };
+
+      animate()
+    </script>
+  </body>
+</html>
