@@ -63,8 +63,8 @@
 
     </script>
     <script type="module">
-        import * as THREE from './js/three.module.js';
-        import { OrbitControls } from './js/controls/OrbitControls.js';
+        import * as THREE from '../js/three.module.js';
+        // import * as OrbitControls from '../js/controls/OrbitControls.js';
         var renderer, scene, camera, stats;
 
         var sphere;
@@ -84,7 +84,7 @@
             scene = new THREE.Scene();
 
             // var amount = 100000;
-            var amount = 1000;
+            var amount = 50;
 
             var radius = 200;
 
@@ -142,24 +142,25 @@
                 colorArr.push(0);
                 colorArr.push(1);
             }
+            // console.log(pointArr)
+            console.log(colorArr)
             // console.log(positions)
             // geometry.setPositions(pointArr);
             pointArr = new Float32Array(pointArr);
             colorArr = new Float32Array(colorArr);
             // console.log(pointArr)
-            // console.log(colors)
+            console.log(colors)
             var geometry = new THREE.BufferGeometry();
             geometry.addAttribute('position', new THREE.BufferAttribute(pointArr, 3));
             geometry.addAttribute('customColor', new THREE.BufferAttribute(colors, 3));
             geometry.addAttribute('size', new THREE.BufferAttribute(sizes, 1));
 
 
-
             var material = new THREE.ShaderMaterial({
 
                 uniforms: {
                     color: { value: new THREE.Color(0xf0ffff) },
-                    pointTexture: { value: new THREE.TextureLoader().load("images/spark1.png") }
+                    pointTexture: { value: new THREE.TextureLoader().load("../images/spark2.png") }
                 },
                 vertexShader: document.getElementById('vertexshader').textContent,
                 fragmentShader: document.getElementById('fragmentshader').textContent,
@@ -170,7 +171,6 @@
                 transparent: true
 
             });
-
             sphere = new THREE.Points(geometry, material);
             scene.add(sphere);
 
@@ -182,8 +182,8 @@
 
             var container = document.getElementById('myBox');
             container.appendChild(renderer.domElement);
-            var controls = new OrbitControls(camera, renderer.domElement);//控制鼠标移动镜头移动
-            controls.damping = 0.2;
+            // var controls = OrbitControls(camera, renderer.domElement);//控制鼠标移动镜头移动
+            // controls.damping = 0.2;
 
             window.addEventListener('resize', onWindowResize, false);
 
@@ -222,7 +222,7 @@
             var newArray = arr.concat(delArray);
 
             attributes.position.array = new Float32Array(newArray);
-            attributes.position.needsUpdate = true;
+            // attributes.position.needsUpdate = true;
             renderer.render(scene, camera);
 
         }
