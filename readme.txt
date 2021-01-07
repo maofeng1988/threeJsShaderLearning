@@ -1,1 +1,1 @@
-// 这是关于three.js里shader学习的练习
+// 这是关于three.js shader的练习
