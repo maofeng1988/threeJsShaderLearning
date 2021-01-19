@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>my first three.js scene</title>
+    <meta charset="utf-8">
+    <style>
+        body { margin: 0; }
+    </style>
+  </head>
+  <body>
+    <script src="../js/three.js"></script>
+    <script>
+      // Our Javascript will go here.
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000);
+
+      const renderer = new THREE.WebGLRenderer();
+      renderer.setSize( window.innerWidth, window.innerHeight);
+      document.body.appendChild( renderer.domElement );
+
+      const geometry = new THREE.BoxGeometry();
+      const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 });
+      
+
+      camera.position.z = 5;
+
+      var lineMaterial = new THREE.LineBasicMaterial({
+      // 线的颜色
+      color: "#57d8ff",
+      transparent: true,
+      linewidth: 5,
+      opacity: 1.0,
+      //depthTest: true,
+      });
+      //解决z-flighting
+      lineMaterial.polygonOffset = true;
+      lineMaterial.depthTest = true;
+      lineMaterial.polygonOffsetFactor = 1;
+      lineMaterial.polygonOffsetUnits = 1.0;
+
+      // const cube = new THREE.Mesh( geometry, lineMaterial);
+      // scene.add( cube );
+      let edges = new THREE.EdgesGeometry(geometry,1);
+      edges.scale(1.0,1.0,1.0)
+      let lineS= new THREE.LineSegments(edges, lineMaterial);
+      lineS.rotateY(Math.PI/5);
+      lineS.position.set(0,0,0)
+      scene.add(lineS);
+
+      function animate() {
+        requestAnimationFrame( animate );
+        lineS.rotation.x += 0.01;
+        lineS.rotation.y += 0.01;
+        renderer.render( scene, camera );
+      }
+
+      animate()
+    </script>
+  </body>
+</html>
