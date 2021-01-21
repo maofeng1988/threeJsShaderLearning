@@ -1,0 +1,368 @@
+{
+    "asset" : {
+        "generator" : "Khronos glTF Blender I/O v1.2.75",
+        "version" : "2.0"
+    },
+    "extensionsUsed" : [
+        "KHR_texture_transform"
+    ],
+    "extensionsRequired" : [
+        "KHR_texture_transform"
+    ],
+    "scene" : 0,
+    "scenes" : [
+        {
+            "name" : "Scene",
+            "nodes" : [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5
+            ]
+        }
+    ],
+    "nodes" : [
+        {
+            "mesh" : 0,
+            "name" : "replace",
+            "scale" : [
+                0.0317048653960228,
+                0.0317048653960228,
+                0.0317048653960228
+            ]
+        },
+        {
+            "name" : "Sun",
+            "rotation" : [
+                0.363957017660141,
+                0.1731017678976059,
+                -0.2527911365032196,
+                0.8795838356018066
+            ],
+            "scale" : [
+                0.3091871738433838,
+                0.3091871738433838,
+                0.3091871738433838
+            ],
+            "translation" : [
+                11.109094619750977,
+                52.23052978515625,
+                8.764999389648438
+            ]
+        },
+        {
+            "name" : "Camera",
+            "rotation" : [
+                0.6681696176528931,
+                0.0013372317189350724,
+                -0.001200928702019155,
+                0.7440068125724792
+            ],
+            "translation" : [
+                0.4189814031124115,
+                49.55788040161133,
+                99.75709533691406
+            ]
+        },
+        {
+            "mesh" : 1,
+            "name" : "9009_hp",
+            "scale" : [
+                0.021232597529888153,
+                0.021232597529888153,
+                0.021232597529888153
+            ],
+            "translation" : [
+                0.07127172499895096,
+                2.208660125732422,
+                -0.07512986660003662
+            ]
+        },
+        {
+            "name" : "Sun.001",
+            "rotation" : [
+                0.621555507183075,
+                -0.41753503680229187,
+                0.2674507796764374,
+                0.6064679026603699
+            ],
+            "scale" : [
+                0.3091871738433838,
+                0.3091871738433838,
+                0.3091871738433838
+            ],
+            "translation" : [
+                -12.441305160522461,
+                39.97932052612305,
+                6.944563388824463
+            ]
+        },
+        {
+            "name" : "Sun.002",
+            "rotation" : [
+                -0.5778179168701172,
+                0.16009919345378876,
+                -0.11924851685762405,
+                0.7913750410079956
+            ],
+            "scale" : [
+                0.3091871738433838,
+                0.3091871738433838,
+                0.3091871738433838
+            ],
+            "translation" : [
+                0.14507386088371277,
+                41.139617919921875,
+                -15.824125289916992
+            ]
+        }
+    ],
+    "materials" : [
+        {
+            "doubleSided" : true,
+            "emissiveFactor" : [
+                0,
+                0,
+                0
+            ],
+            "name" : "v3d-fab",
+            "pbrMetallicRoughness" : {
+                "metallicFactor" : 0
+            }
+        },
+        {
+            "doubleSided" : true,
+            "emissiveFactor" : [
+                0,
+                0,
+                0
+            ],
+            "name" : "test",
+            "normalTexture" : {
+                "extensions" : {
+                    "KHR_texture_transform" : {
+                        "offset" : [
+                            0,
+                            -7
+                        ],
+                        "scale" : [
+                            8,
+                            8
+                        ]
+                    }
+                },
+                "index" : 0,
+                "texCoord" : 0
+            },
+            "pbrMetallicRoughness" : {
+                "baseColorTexture" : {
+                    "extensions" : {
+                        "KHR_texture_transform" : {
+                            "offset" : [
+                                0,
+                                -7
+                            ],
+                            "scale" : [
+                                8,
+                                8
+                            ]
+                        }
+                    },
+                    "index" : 1,
+                    "texCoord" : 0
+                },
+                "metallicFactor" : 0,
+                "roughnessFactor" : 1
+            }
+        }
+    ],
+    "meshes" : [
+        {
+            "name" : "Plane",
+            "primitives" : [
+                {
+                    "attributes" : {
+                        "POSITION" : 0,
+                        "NORMAL" : 1,
+                        "TEXCOORD_0" : 2
+                    },
+                    "indices" : 3,
+                    "material" : 0
+                }
+            ]
+        },
+        {
+            "name" : "1101_test_01.008",
+            "primitives" : [
+                {
+                    "attributes" : {
+                        "POSITION" : 4,
+                        "NORMAL" : 5,
+                        "TEXCOORD_0" : 6,
+                        "JOINTS_0" : 7,
+                        "WEIGHTS_0" : 8
+                    },
+                    "indices" : 9,
+                    "material" : 1
+                }
+            ]
+        }
+    ],
+    "textures" : [
+        {
+            "source" : 0
+        },
+        {
+            "source" : 0
+        }
+    ],
+    "images" : [
+        {
+            "mimeType" : "image/jpeg",
+            "name" : "Chocofur_Fabric_Solid_21_diff",
+            "uri" : "Chocofur_Fabric_Solid_21_diff.jpg"
+        }
+    ],
+    "accessors" : [
+        {
+            "bufferView" : 0,
+            "componentType" : 5126,
+            "count" : 4,
+            "max" : [
+                1,
+                3.056915283203125,
+                1
+            ],
+            "min" : [
+                -1,
+                3.056915283203125,
+                -1
+            ],
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 1,
+            "componentType" : 5126,
+            "count" : 4,
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 2,
+            "componentType" : 5126,
+            "count" : 4,
+            "type" : "VEC2"
+        },
+        {
+            "bufferView" : 3,
+            "componentType" : 5123,
+            "count" : 6,
+            "type" : "SCALAR"
+        },
+        {
+            "bufferView" : 4,
+            "componentType" : 5126,
+            "count" : 15615,
+            "max" : [
+                367.9614562988281,
+                207.42015075683594,
+                575.1163330078125
+            ],
+            "min" : [
+                -375.49267578125,
+                -217.4222869873047,
+                -472.447021484375
+            ],
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 5,
+            "componentType" : 5126,
+            "count" : 15615,
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 6,
+            "componentType" : 5126,
+            "count" : 15615,
+            "type" : "VEC2"
+        },
+        {
+            "bufferView" : 7,
+            "componentType" : 5123,
+            "count" : 15615,
+            "type" : "VEC4"
+        },
+        {
+            "bufferView" : 8,
+            "componentType" : 5126,
+            "count" : 15615,
+            "type" : "VEC4"
+        },
+        {
+            "bufferView" : 9,
+            "componentType" : 5123,
+            "count" : 63468,
+            "type" : "SCALAR"
+        }
+    ],
+    "bufferViews" : [
+        {
+            "buffer" : 0,
+            "byteLength" : 48,
+            "byteOffset" : 0
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 48,
+            "byteOffset" : 48
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 32,
+            "byteOffset" : 96
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 12,
+            "byteOffset" : 128
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 187380,
+            "byteOffset" : 140
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 187380,
+            "byteOffset" : 187520
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 124920,
+            "byteOffset" : 374900
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 124920,
+            "byteOffset" : 499820
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 249840,
+            "byteOffset" : 624740
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 126936,
+            "byteOffset" : 874580
+        }
+    ],
+    "buffers" : [
+        {
+            "byteLength" : 1001516,
+            "uri" : "yurongfu.bin"
+        }
+    ]
+}
