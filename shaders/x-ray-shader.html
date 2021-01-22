@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>x-ray-shader</title>
+    </head>
+    <body>
+        <script src="../js/three.js"></script>
+        <script src="../js/controls/OrbitControls.js"></script>
+        <script src="../js/loaders/GLTFLoader.js"></script>
+        <script type="x-shader/x-vertex" id="vertexshader">
+            varying vec3 vNormal;
+            varying vec3 vPositionNormal;
+            void main() 
+            {
+                vNormal = normalize( normalMatrix * normal ); // 转换到视图空间
+                vPositionNormal = normalize(( modelViewMatrix * vec4(position, 1.0) ).xyz);
+                gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+            }
+        </script>
+        <script type="x-shader/x-fragment" id="fragmentshader">
+            uniform vec3 glowColor;
+            uniform float bias;
+            uniform float power;
+            uniform float scale;
+            varying vec3 vNormal;
+            varying vec3 vPositionNormal;
+            void main() 
+            {
+                float a = pow( bias + scale * abs(dot(vNormal, vPositionNormal)), power );
+                gl_FragColor = vec4( glowColor, a );
+            }
+        </script>
+        <script>
+            const loader = new THREE.GLTFLoader();
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerHeight/window.innerHeight, 0.1, 10000);
+            const render = new THREE.WebGLRenderer();
+
+            document.body.append(render.domElement);
+
+            const controls = new THREE.OrbitControls(camera, render.domElement);
+
+            render.setSize(window.innerWidth, window.innerHeight);
+            camera.position.z = 10;
+            controls.enableDamping = true;
+            controls.update();
+            // const box = new THREE.BoxBufferGeometry(2,2,2);
+            const mat = new THREE.MeshBasicMaterial({color: 0xff0000});
+            const material = new THREE.LineBasicMaterial(
+                {
+                    color: 0xffff00,
+                    lineWidth: 1,
+                });
+
+            let uniformsXary = {
+                                    scale:   { type: "f", value: -1.0},
+                                    bias:   { type: "f", value: 1.0},
+                                    power:   { type: "f", value: 1.4 },
+                                    glowColor: { type: "c", value: new THREE.Color(0x00ffff) }
+                                }
+            let materialXay = new THREE.ShaderMaterial({
+                uniforms:uniformsXary,
+                vertexShader:document.getElementById( 'vertexshader').textContent,
+                fragmentShader: document.getElementById( 'fragmentshader').textContent,
+                transparent:true,
+                depthWrite:false,
+                depthTest:true,
+                depthFunc:THREE.GreaterDepth
+            });
+
+            let materialNormal=new THREE.ShaderMaterial({
+                uniforms:{},
+                vertexShader:document.getElementById( 'vertexshader').textContent,
+                fragmentShader: document.getElementById( 'fragmentshader').textContent,
+                transparent:true,
+                depthWrite:true,
+                depthFunc:THREE.LessEqualDepth
+            });
+            
+            let materialTest = new THREE.MeshBasicMaterial({color: 0xff0000})
+
+            loader.load('../models/monkey5.gltf', function(gltf){
+                if(gltf) {
+                    gltf.scene.traverse(function(child) {
+                        if(child.isMesh && child.name!=='Suzanne') {
+                            // debugger
+                            // const newGeo = new THREE.EdgesGeometry(child.geometry);
+                            // const newMesh = new THREE.LineSegments(newGeo, material);
+                            // scene.add(newMesh)
+                            // console.log(child)
+
+                            let materialnormal=child.material;
+                            materialnormal.polygonOffset = true;
+                            materialnormal.depthTest = true;
+                            materialnormal.polygonOffsetFactor = 1;
+                            materialnormal.polygonOffsetUnits = 1.0;
+							child.castShadow = true;
+							child.receiveShadow = true;
+                            let sphereGeomXay=child.geometry.clone();
+                            let meshXay=new THREE.Mesh(sphereGeomXay,materialXay);
+                            scene.add( meshXay );
+                        } 
+                        else if(child.isMesh) {
+                            const newGeo = new THREE.BufferGeometry(child.geometry);
+                            const newMesh = new THREE.Mesh(child.geometry, materialNormal);
+                            scene.add(newMesh)
+                            console.log(child) 
+                        }
+
+                    });
+                    // gltf.scene.traverse(function(child) {
+                    //     if(child.isMesh) {
+                    //         const newGeo = new THREE.BufferGeometry(child.geometry);
+                    //         const newMesh = new THREE.Mesh(child.geometry, materialNormal);
+                    //         scene.add(newMesh)
+                    //         console.log(child) 
+                    //     }
+
+                    // });
+                    // scene.add(gltf.scene)
+                }
+            })
+
+            window.addEventListener('resize', function() {
+                render.setSize(window.innerWidth, window.innerHeight)
+            })
+            function animate() {
+                controls.update();
+                render.render(scene, camera);
+                requestAnimationFrame(animate);
+            };
+            animate();
+        </script>
+    </body>
+</html>
