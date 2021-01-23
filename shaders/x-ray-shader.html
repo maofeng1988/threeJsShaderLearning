@@ -35,8 +35,55 @@
             const scene = new THREE.Scene();
             const camera = new THREE.PerspectiveCamera(75, window.innerHeight/window.innerHeight, 0.1, 10000);
             const render = new THREE.WebGLRenderer();
+            render.shadowMap.enabled = true;
+
+            // var camhelper = new THREE.CameraHelper( camera );
+            // scene.add( camhelper );
 
             document.body.append(render.domElement);
+
+            const directionalLight = new THREE.DirectionalLight( 0xffffff, 1.0 );
+            directionalLight.position.set( 5, 5, 5 );
+            directionalLight.castShadow = true;
+			const d = 10;
+			directionalLight.shadow.camera.left = - d;
+			directionalLight.shadow.camera.right = d;
+			directionalLight.shadow.camera.top = d;
+			directionalLight.shadow.camera.bottom = - d;
+
+			directionalLight.shadow.camera.near = 2;
+			directionalLight.shadow.camera.far = 50;
+
+			directionalLight.shadow.mapSize.x = 1024;
+			directionalLight.shadow.mapSize.y = 1024;
+            const ambientLight = new THREE.AmbientLight("#ffffff", 3);
+            const helper = new THREE.DirectionalLightHelper( directionalLight, 1 );
+            scene.add( helper );
+            scene.add( directionalLight );
+            // scene.add( ambientLight );
+            scene.background = new THREE.Color( 0xcce0ff );
+            scene.add( new THREE.AmbientLight( 0x666666 ) );
+
+            var hemiLight = new THREE.HemisphereLight(0x0000ff, 0x00ff00, 0.6);
+            hemiLight.position.set(0, 100, 0); //这个也是默认位置
+            scene.add(hemiLight);
+            // const light = new THREE.HemisphereLight( 0xffffbb, 0x080820, 1 );
+            // scene.add( light );
+            // const target = new THREE.Object3D();
+            // target.position.set(0,1,0);;
+
+            // directionalLight.target = target;
+            debugger
+            // scene.add(target);
+            const directionalLight2 = new THREE.DirectionalLight( 0xffffff, 1.0 );
+            directionalLight2.position.z = 10;
+            // directionalLight2.target =(100, 0, 0);
+            const directionalLight2Helper = new THREE.DirectionalLightHelper(directionalLight2, 1);
+            scene.add(directionalLight2Helper);
+            // scene.add(directionalLight2.target);
+            scene.add( directionalLight2 );
+
+
 
             const controls = new THREE.OrbitControls(camera, render.domElement);
 
@@ -44,8 +91,28 @@
             camera.position.z = 10;
             controls.enableDamping = true;
             controls.update();
+
             // const box = new THREE.BoxBufferGeometry(2,2,2);
-            const mat = new THREE.MeshBasicMaterial({color: 0xff0000});
+            const mat = new THREE.MeshLambertMaterial({
+                color: 0xff0000,
+                transparent:false,
+                depthWrite:true,
+                depthTest:true,
+                depthFunc:THREE.LessEqualDepth
+            });
+
+            const ground = new THREE.PlaneGeometry(20, 20, 32);
+            var gmaterial = new THREE.MeshPhongMaterial( {
+                color: 0xffff00, 
+                // side: THREE.DoubleSidek,
+            } );
+            const groundMesh = new THREE.Mesh(ground, gmaterial);
+            groundMesh.receiveShadow = true;
+            groundMesh.castShadow = true;
+            groundMesh.rotation.x = -Math.PI/2;
+            groundMesh.position.y -=2;
+            scene.add(groundMesh);
+            
             const material = new THREE.LineBasicMaterial(
                 {
                     color: 0xffff00,
@@ -58,6 +125,12 @@
                                     power:   { type: "f", value: 1.4 },
                                     glowColor: { type: "c", value: new THREE.Color(0x00ffff) }
                                 }
+            let uniformsNormal = {
+                scale:   { type: "f", value: -1.0},
+                bias:   { type: "f", value: 1.0},
+                power:   { type: "f", value: 1.4 },
+                glowColor: { type: "c", value: new THREE.Color(0xff00ff) }
+            }
             let materialXay = new THREE.ShaderMaterial({
                 uniforms:uniformsXary,
                 vertexShader:document.getElementById( 'vertexshader').textContent,
@@ -69,7 +142,7 @@
             });
 
             let materialNormal=new THREE.ShaderMaterial({
-                uniforms:{},
+                uniforms:uniformsNormal,
                 vertexShader:document.getElementById( 'vertexshader').textContent,
                 fragmentShader: document.getElementById( 'fragmentshader').textContent,
                 transparent:true,
@@ -79,45 +152,26 @@
             
             let materialTest = new THREE.MeshBasicMaterial({color: 0xff0000})
 
-            loader.load('../models/monkey5.gltf', function(gltf){
+            loader.load('../models/monkey6.gltf', function(gltf){
                 if(gltf) {
+                    
                     gltf.scene.traverse(function(child) {
+                        child.isMesh && (child.castShadow = true);
+                        child.isMesh && (child.receiveShadow = true);
                         if(child.isMesh && child.name!=='Suzanne') {
-                            // debugger
-                            // const newGeo = new THREE.EdgesGeometry(child.geometry);
-                            // const newMesh = new THREE.LineSegments(newGeo, material);
-                            // scene.add(newMesh)
-                            // console.log(child)
 
                             let materialnormal=child.material;
                             materialnormal.polygonOffset = true;
                             materialnormal.depthTest = true;
                             materialnormal.polygonOffsetFactor = 1;
                             materialnormal.polygonOffsetUnits = 1.0;
-							child.castShadow = true;
-							child.receiveShadow = true;
                             let sphereGeomXay=child.geometry.clone();
                             let meshXay=new THREE.Mesh(sphereGeomXay,materialXay);
                             scene.add( meshXay );
                         } 
-                        else if(child.isMesh) {
-                            const newGeo = new THREE.BufferGeometry(child.geometry);
-                            const newMesh = new THREE.Mesh(child.geometry, materialNormal);
-                            scene.add(newMesh)
-                            console.log(child) 
-                        }
 
                     });
-                    // gltf.scene.traverse(function(child) {
-                    //     if(child.isMesh) {
-                    //         const newGeo = new THREE.BufferGeometry(child.geometry);
-                    //         const newMesh = new THREE.Mesh(child.geometry, materialNormal);
-                    //         scene.add(newMesh)
-                    //         console.log(child) 
-                    //     }
-
-                    // });
-                    // scene.add(gltf.scene)
+                    scene.add(gltf.scene)
                 }
             })
 

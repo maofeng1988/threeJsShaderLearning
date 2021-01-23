@@ -113,7 +113,7 @@
 
           });
           mesh = new THREE.Mesh(geometry, material);
-          mesh.position = new THREE.Vector3(0, 0, 0);
+          mesh.position.set(0, 1, 0);
           scene.add(mesh);
       }
       //运行webgl
