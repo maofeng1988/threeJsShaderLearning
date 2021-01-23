@@ -7,6 +7,8 @@
         <script src="../js/three.js"></script>
         <script src="../js/controls/OrbitControls.js"></script>
         <script src="../js/loaders/GLTFLoader.js"></script>
+        <script src="../js/libs/dat.gui.min.js"></script>
+        <script src="../js/libs/stats.min.js"></script>
         <script type="x-shader/x-vertex" id="vertexshader">
             varying vec3 vNormal;
             varying vec3 vPositionNormal;
@@ -57,16 +59,16 @@
 			directionalLight.shadow.mapSize.x = 1024;
 			directionalLight.shadow.mapSize.y = 1024;
             const ambientLight = new THREE.AmbientLight("#ffffff", 3);
-            const helper = new THREE.DirectionalLightHelper( directionalLight, 1 );
-            scene.add( helper );
+            // const helper = new THREE.DirectionalLightHelper( directionalLight, 1 );
+            // scene.add( helper );s
             scene.add( directionalLight );
             // scene.add( ambientLight );
             scene.background = new THREE.Color( 0xcce0ff );
             scene.add( new THREE.AmbientLight( 0x666666 ) );
 
-            var hemiLight = new THREE.HemisphereLight(0x0000ff, 0x00ff00, 0.6);
-            hemiLight.position.set(0, 100, 0); //这个也是默认位置
-            scene.add(hemiLight);
+            // var hemiLight = new THREE.HemisphereLight(0x0000ff, 0x00ff00, 0.6);
+            // hemiLight.position.set(0, 100, 0); //这个也是默认位置
+            // scene.add(hemiLight);
             // const light = new THREE.HemisphereLight( 0xffffbb, 0x080820, 1 );
             // scene.add( light );
             // const target = new THREE.Object3D();
@@ -78,8 +80,8 @@
             const directionalLight2 = new THREE.DirectionalLight( 0xffffff, 1.0 );
             directionalLight2.position.z = 10;
             // directionalLight2.target =(100, 0, 0);
-            const directionalLight2Helper = new THREE.DirectionalLightHelper(directionalLight2, 1);
-            scene.add(directionalLight2Helper);
+            // const directionalLight2Helper = new THREE.DirectionalLightHelper(directionalLight2, 1);
+            // scene.add(directionalLight2Helper);
             // scene.add(directionalLight2.target);
             scene.add( directionalLight2 );
 
@@ -175,14 +177,56 @@
                 }
             })
 
+            //初始化性能插件
+            var stats;
+            function initStats() {
+                stats = new Stats();
+                document.body.appendChild(stats.dom);
+            }
+
+            //初始化dat.GUI简化试验流程
+            var gui;
+            function initGui() {
+                //声明一个保存需求修改的相关数据的对象
+                gui = {
+                    ambientLight:"#111111", //环境光源
+                    pointLight:"#ffffff", //点光源
+                    lightY: 30, //灯光y轴的位置
+                    // cubeX: 5, //立方体的x轴位置
+                    // cubeY: 5, //立方体的x轴位置
+                    // cubeZ: -5 //立方体的z轴的位置
+                };
+                var datGui = new dat.GUI();
+                //将设置属性添加到gui当中，gui.add(对象，属性，最小值，最大值）
+                datGui.addColor(gui,"ambientLight").onChange(function (e) {
+                    ambientLight.color = new THREE.Color(e);
+                });
+                datGui.addColor(gui,"pointLight").onChange(function (e) {
+                    directionalLight.color = new THREE.Color(e);
+                });
+                datGui.add(gui, "lightY", 0, 100);
+                // datGui.add(gui, "cubeX", -30, 30);
+                // datGui.add(gui, "cubeY", -30, 30);
+                // datGui.add(gui, "cubeZ", -30, 30);
+            }
+
             window.addEventListener('resize', function() {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                // render.render(scene, camera);
                 render.setSize(window.innerWidth, window.innerHeight)
             })
             function animate() {
+                //更新性能插件
+                stats.update();
+                
                 controls.update();
+                directionalLight.position.y = gui.lightY;
                 render.render(scene, camera);
                 requestAnimationFrame(animate);
             };
+            initStats()
+            initGui()
             animate();
         </script>
     </body>
