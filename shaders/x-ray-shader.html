@@ -35,7 +35,7 @@
         <script>
             const loader = new THREE.GLTFLoader();
             const scene = new THREE.Scene();
-            const camera = new THREE.PerspectiveCamera(75, window.innerHeight/window.innerHeight, 0.1, 10000);
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 10000);
             const render = new THREE.WebGLRenderer();
             render.shadowMap.enabled = true;
 
@@ -218,15 +218,15 @@
             })
             function animate() {
                 //更新性能插件
-                stats.update();
+                // stats.update();
                 
                 controls.update();
-                directionalLight.position.y = gui.lightY;
+                // directionalLight.position.y = gui.lightY;
                 render.render(scene, camera);
                 requestAnimationFrame(animate);
             };
-            initStats()
-            initGui()
+            // initStats()
+            // initGui()
             animate();
         </script>
     </body>
